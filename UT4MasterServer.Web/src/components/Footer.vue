@@ -12,7 +12,9 @@
       </div>
     </div>
 
-    <button class="btn btn-secondary btn-sm btn-smaller" @click="ServerStore.fetchGameServers">Refresh</button>
+    <button class="btn btn-lg btn-icon text-light" @click="ServerStore.fetchGameServers">
+      <FontAwesomeIcon icon="fa-solid fa-arrows-rotate" />
+    </button>
   </nav>
 </template>
 
@@ -34,6 +36,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, shallowRef } from 'vue';
 import { ServerStore } from '@/stores/server-store';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const pollTime = 30000;
 const timer = shallowRef<NodeJS.Timer | undefined>(undefined);

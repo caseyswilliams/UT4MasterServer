@@ -1,5 +1,5 @@
 <template>
-  <RouterLink :class="{ 'nav-link': !dropdown, 'dropdown-item': dropdown }" :to="path">{{ text }}</RouterLink>
+  <RouterLink :class="{ 'nav-link': !dropdown, 'dropdown-item': dropdown, 'active': active }" :to="path">{{ text }}</RouterLink>
 </template>
   
 <script setup lang="ts">

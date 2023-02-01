@@ -3,18 +3,17 @@
 
   <div class="form-group row">
     <div class="col-sm-6">
-      <LoadingPanel :status="accountsStatus">
-        <label for="accountId" class="col-sm-6 col-form-label">Account</label>
-        <Autocomplete
-          v-if="AccountStore.account"
-          :value="accountId"
-          :items="accounts"
-          item-key="id"
-          search-key="username"
-          @input-change="searchAccounts"
-          @select="handleSelectAccount"
-        />
-      </LoadingPanel>
+      <label for="accountId" class="col-sm-6 col-form-label">Account</label>
+      <Autocomplete
+        v-if="AccountStore.account"
+        :value="accountId"
+        :items="accounts"
+        item-key="id"
+        search-key="username"
+        :status="accountsStatus"
+        @input-change="searchAccounts"
+        @select="handleSelectAccount"
+      />
     </div>
     <div class="col-sm-6">
       <label for="statWindow" class="col-sm-6 col-form-label">

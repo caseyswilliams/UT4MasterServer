@@ -56,7 +56,7 @@
           <template v-else>
             <HeaderLink text="Stats" path="/Stats" />
           </template>
-          <Dropdown text="Admin" v-if="AccountStore.isAdmin">
+          <Dropdown v-if="AccountStore.isAdmin" text="Admin">
             <HeaderLink text="Accounts" path="/Admin/Accounts" dropdown />
             <HeaderLink text="Clients" path="/Admin/Clients" dropdown />
             <HeaderLink
@@ -65,7 +65,7 @@
               dropdown
             />
           </Dropdown>
-          <Dropdown text="Profile" v-if="SessionStore.isAuthenticated">
+          <Dropdown v-if="SessionStore.isAuthenticated" text="Profile">
             <HeaderLink
               text="Player Card"
               path="/Profile/PlayerCard"

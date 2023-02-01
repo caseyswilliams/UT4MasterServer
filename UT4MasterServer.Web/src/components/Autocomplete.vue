@@ -4,6 +4,7 @@
       v-model="searchText"
       type="text"
       class="form-control"
+      placeholder="Search..."
       @focus="handleFocus"
       @blur="handleBlur"
       @keydown="handleKeydown"
@@ -26,17 +27,18 @@
         v-show="!filteredItems.length"
         class="autocomplete-menu-item dropdown-item no-items"
       >
-        No items
+        {{ noItemText }}
       </div>
     </div>
     <button
-      v-if="searchText.length"
+      v-if="searchText.length && status === AsyncStatus.OK"
       type="button"
       class="btn btn-primary btn-sm btn-smaller clear-button"
       @click="handleClear"
     >
       Clear
     </button>
+    <div v-if="status === AsyncStatus.BUSY" class="spinner" />
   </div>
 </template>
 
@@ -59,12 +61,25 @@
     right: 10px;
     top: 10px;
   }
+
+  .spinner {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translate(0, -50%);
+    background-image: url(../assets/loading.gif);
+    background-size: contain;
+    height: 30px;
+    width: 30px;
+    z-index: 10;
+  }
 }
 </style>
 
 <script setup lang="ts">
 import { ref, PropType, computed, watch } from 'vue';
 import { debounce } from 'ts-debounce';
+import { AsyncStatus } from '@/types/async-status';
 
 const props = defineProps({
   items: {
@@ -83,6 +98,14 @@ const props = defineProps({
   value: {
     type: String,
     default: undefined
+  },
+  status: {
+    type: Number as PropType<AsyncStatus>,
+    default: AsyncStatus.OK
+  },
+  noItemText: {
+    type: String,
+    default: 'No results'
   }
 });
 

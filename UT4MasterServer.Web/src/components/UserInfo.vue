@@ -1,13 +1,13 @@
 <template>
   <div class="navbar navbar-primary bg-light user-info">
     <div class="container">
+      <FriendsList />
       <div class="d-flex align-items-center">
-        <label> Username: </label>
         <RouterLink to="/Profile/PlayerCard">{{
           AccountStore.account?.username
         }}</RouterLink>
         <button
-          class="btn btn-icon btn-lg"
+          class="btn btn-icon btn-lg auth-code"
           :class="{ 'text-success': copied }"
           title="Get auth code and copy to clipboard"
           @click="getAuthCode"
@@ -15,16 +15,6 @@
           <FontAwesomeIcon v-if="!copied" icon="fa-solid fa-key" />
           <FontAwesomeIcon v-else icon="fa-solid fa-check" />
           <span>{{ copied ? 'Copied to clipboard!' : '' }}</span>
-        </button>
-      </div>
-      <div v-if="false">
-        <button
-          class="btn btn-icon btn-lg friends-button"
-          :class="{ 'text-light bg-dark': showFriendsList }"
-          @click="showFriendsList = !showFriendsList"
-          title="Friends"
-        >
-          <FontAwesomeIcon icon="fa-solid fa-user-group" />
         </button>
       </div>
     </div>
@@ -54,6 +44,10 @@
       font-size: 0.75rem;
       padding-left: 0.5rem;
     }
+
+    &.auth-code {
+      margin-bottom: -2px;
+    }
   }
 
   .friends-button {
@@ -69,11 +63,11 @@ import AuthenticationService from '@/services/authentication.service';
 import { AsyncStatus } from '@/types/async-status';
 import { AccountStore } from '@/stores/account-store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import FriendsList from './FriendsList.vue';
 
 const service = new AuthenticationService();
 const status = shallowRef(AsyncStatus.OK);
 const copied = shallowRef(false);
-const showFriendsList = shallowRef(false);
 
 async function getAuthCode() {
   try {

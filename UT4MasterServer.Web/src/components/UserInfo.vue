@@ -1,29 +1,31 @@
 <template>
   <div class="navbar navbar-primary bg-light user-info">
     <div class="container">
-      <div>
-        <label>
-          <RouterLink to="/Profile/PlayerCard">Username:</RouterLink>
-        </label>
-        {{ AccountStore.account?.username ?? SessionStore.username }}
+      <div class="d-flex align-items-center">
+        <label> Username: </label>
+        <RouterLink to="/Profile/PlayerCard">{{
+          AccountStore.account?.username
+        }}</RouterLink>
+        <button
+          class="btn btn-icon btn-lg"
+          :class="{ 'text-success': copied }"
+          title="Get auth code and copy to clipboard"
+          @click="getAuthCode"
+        >
+          <FontAwesomeIcon v-if="!copied" icon="fa-solid fa-key" />
+          <FontAwesomeIcon v-else icon="fa-solid fa-check" />
+          <span>{{ copied ? 'Copied to clipboard!' : '' }}</span>
+        </button>
       </div>
-      <div>
-        <LoadingPanel :status="status">
-          <label>Auth Code: </label>
-          <span v-if="authCode">{{ authCode }}</span>
-          <button
-            type="button"
-            class="btn btn-sm btn-primary"
-            @click="getAuthCode"
-          >
-            Get Code
-          </button>
-          <CopyButton
-            v-if="authCode"
-            :subject="authCode"
-            custom-class="btn-secondary"
-          />
-        </LoadingPanel>
+      <div v-if="false">
+        <button
+          class="btn btn-icon btn-lg friends-button"
+          :class="{ 'text-light bg-dark': showFriendsList }"
+          @click="showFriendsList = !showFriendsList"
+          title="Friends"
+        >
+          <FontAwesomeIcon icon="fa-solid fa-user-group" />
+        </button>
       </div>
     </div>
   </div>
@@ -41,13 +43,22 @@
     margin-right: 5px;
   }
 
-  button {
-    margin-left: 5px;
-    padding: 3px 5px;
-  }
-
   a {
     text-decoration: none;
+  }
+
+  button.btn-lg {
+    padding-left: 0.5rem;
+    span {
+      text-transform: none;
+      font-size: 0.75rem;
+      padding-left: 0.5rem;
+    }
+  }
+
+  .friends-button {
+    padding: 0.5rem;
+    margin: -0.5rem -0.5rem -0.5rem 0.5rem;
   }
 }
 </style>
@@ -56,20 +67,24 @@
 import { shallowRef, onMounted } from 'vue';
 import AuthenticationService from '@/services/authentication.service';
 import { AsyncStatus } from '@/types/async-status';
-import LoadingPanel from './LoadingPanel.vue';
 import { AccountStore } from '@/stores/account-store';
-import { SessionStore } from '@/stores/session-store';
-import CopyButton from './CopyButton.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const service = new AuthenticationService();
-const authCode = shallowRef<string | null>(null);
 const status = shallowRef(AsyncStatus.OK);
+const copied = shallowRef(false);
+const showFriendsList = shallowRef(false);
 
 async function getAuthCode() {
   try {
     status.value = AsyncStatus.BUSY;
-    authCode.value = await service.getAuthCode();
-    status.value = AsyncStatus.OK;
+    const authCode = await service.getAuthCode();
+    status.value = authCode !== null ? AsyncStatus.OK : AsyncStatus.ERROR;
+    if (authCode) {
+      navigator.clipboard.writeText(authCode);
+      copied.value = true;
+      setTimeout(() => (copied.value = false), 2000);
+    }
   } catch (err: unknown) {
     status.value = AsyncStatus.ERROR;
   }

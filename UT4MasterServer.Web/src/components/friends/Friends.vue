@@ -28,42 +28,45 @@
           <a class="nav-link" @click="selectTab('blocked')">Blocked</a>
         </li>
       </ul>
-      <LoadingPanel :status="status" auto-load @load="loadData">
-        <div class="tab-content">
-          <div
-            class="tab-pane fade"
-            :class="{ 'show active': selectedTab === 'friends' }"
-          >
-            <ListFriends
-              :friends="friends"
-              :excluded-ids="allAccountIds"
-              @add="addFriend"
-              @remove="removeFriend"
-            />
+      <div class="content">
+        <LoadingPanel :status="status" auto-load @load="loadData">
+          <div class="tab-content">
+            <div
+              class="tab-pane fade"
+              :class="{ 'show active': selectedTab === 'friends' }"
+            >
+              <ListFriends
+                :friends="friends"
+                :excluded-ids="allAccountIds"
+                @add="addFriend"
+                @remove="removeFriend"
+              />
+            </div>
+            <div
+              class="tab-pane fade"
+              :class="{ 'show active': selectedTab === 'pending' }"
+            >
+              <ListPending
+                :friends="pending"
+                @add="addFriend"
+                @remove="removeFriend"
+              />
+            </div>
+            <div
+              class="tab-pane fade"
+              :class="{ 'show active': selectedTab === 'blocked' }"
+            >
+              <ListBlocked
+                :friends="blockedAccounts"
+                :excluded-ids="allAccountIds"
+                @add="blockAccount"
+                @remove="unblockAccount"
+              />
+            </div>
           </div>
-          <div
-            class="tab-pane fade"
-            :class="{ 'show active': selectedTab === 'pending' }"
-          >
-            <ListPending
-              :friends="pending"
-              @add="addFriend"
-              @remove="removeFriend"
-            />
-          </div>
-          <div
-            class="tab-pane fade"
-            :class="{ 'show active': selectedTab === 'blocked' }"
-          >
-            <ListBlocked
-              :friends="blockedAccounts"
-              :excluded-ids="allAccountIds"
-              @add="blockAccount"
-              @remove="unblockAccount"
-            />
-          </div>
-        </div>
-      </LoadingPanel>
+        </LoadingPanel>
+      </div>
+      <div class="fs-6">Chat coming soon</div>
     </div>
   </div>
 </template>
@@ -98,6 +101,12 @@
     min-width: 360px;
     height: 50vh;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+      flex-grow: 1;
+    }
 
     .nav-item {
       margin-right: 0;

@@ -63,7 +63,7 @@ import AuthenticationService from '@/services/authentication.service';
 import { AsyncStatus } from '@/types/async-status';
 import { AccountStore } from '@/stores/account-store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import FriendsList from './FriendsList.vue';
+import FriendsList from './friends/Friends.vue';
 
 const service = new AuthenticationService();
 const status = shallowRef(AsyncStatus.OK);

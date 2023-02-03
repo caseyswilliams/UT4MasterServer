@@ -7,7 +7,7 @@
     </div>
 
     <button
-      class="btn btn-lg btn-icon text-light"
+      class="btn btn-lg btn-icon text-light d-none d-sm-block"
       @click="ServerStore.fetchGameServers"
     >
       <FontAwesomeIcon icon="fa-solid fa-arrows-rotate" />

@@ -95,7 +95,7 @@
     top: 32px;
     left: 8px;
     width: 20vw;
-    min-width: 400px;
+    min-width: 360px;
     height: 50vh;
     z-index: 10;
 

@@ -43,6 +43,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: auto;
 
   .friend {
     display: flex;

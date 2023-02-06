@@ -6,13 +6,13 @@
       <div class="name">{{ friend.username }}</div>
       <button
         class="btn btn-sm btn-icon"
-        title="Remove friend"
+        :title="removeButtonTitle"
         @click="$emit('remove', friend.accountId)"
       >
         <FontAwesomeIcon icon="fa-solid fa-trash-can" />
       </button>
     </div>
-    <h5 v-if="!friends.length">No friends to display</h5>
+    <h5 v-if="!friends.length">{{ emptyText }}</h5>
   </div>
 </template>
 
@@ -21,6 +21,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow: auto;
 
   .friend {
     display: flex;
@@ -51,6 +52,14 @@ defineProps({
   excludedIds: {
     type: Array as PropType<string[]>,
     default: () => []
+  },
+  removeButtonTitle: {
+    type: String,
+    default: 'Remove friend'
+  },
+  emptyText: {
+    type: String,
+    default: 'No friends to display'
   }
 });
 

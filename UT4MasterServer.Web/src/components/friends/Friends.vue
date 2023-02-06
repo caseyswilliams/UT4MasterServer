@@ -1,5 +1,5 @@
 <template>
-  <div v-if="AccountStore.account?.id" class="friends">
+  <div v-if="AccountStore.account?.id" class="friends" @click.stop>
     <button
       class="btn btn-icon btn-lg friends-button"
       :class="{ 'bg-medium': showFriendsList }"
@@ -8,15 +8,7 @@
     >
       <FontAwesomeIcon icon="fa-solid fa-user-group" />
     </button>
-    <div
-      v-show="showFriendsList"
-      class="alert alert-dismissible alert-primary friends-list"
-    >
-      <button
-        type="button"
-        class="btn-close"
-        @click="showFriendsList = false"
-      ></button>
+    <div v-show="showFriendsList" class="alert alert-primary friends-list">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" :class="{ active: selectedTab === 'friends' }">
           <a class="nav-link" @click="selectTab('friends')">Friends</a>
@@ -38,6 +30,7 @@
               <ListFriends
                 :friends="friends"
                 :excluded-ids="allAccountIds"
+                empty-text="No friends to display"
                 @add="addFriend"
                 @remove="removeFriend"
               />
@@ -56,9 +49,11 @@
               class="tab-pane fade"
               :class="{ 'show active': selectedTab === 'blocked' }"
             >
-              <ListBlocked
+              <ListFriends
                 :friends="blockedAccounts"
                 :excluded-ids="allAccountIds"
+                remove-button-title="Unblock account"
+                empty-text="No blocked accounts"
                 @add="blockAccount"
                 @remove="unblockAccount"
               />
@@ -99,8 +94,8 @@
     left: 8px;
     width: 20vw;
     min-width: 360px;
-    height: 50vh;
-    z-index: 10;
+    min-height: 30vh;
+    z-index: 100;
     display: flex;
     flex-direction: column;
 
@@ -111,6 +106,7 @@
     .nav-item {
       margin-right: 0;
       cursor: pointer;
+      font-size: 0.9rem;
       &.active {
         .nav-link {
           isolation: isolate;
@@ -134,9 +130,8 @@ import { AccountStore } from '@/stores/account-store';
 import { AsyncStatus } from '@/types/async-status';
 import { IFriendRequest } from '@/types/friend-request';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { shallowRef } from 'vue';
+import { shallowRef, onMounted, onUnmounted } from 'vue';
 import LoadingPanel from '../LoadingPanel.vue';
-import ListBlocked from './ListBlocked.vue';
 import ListFriends from './ListFriends.vue';
 import ListPending from './ListPending.vue';
 
@@ -233,4 +228,16 @@ async function unblockAccount(id: string) {
     console.error(err);
   }
 }
+
+function close() {
+  showFriendsList.value = false;
+}
+
+onMounted(() => {
+  document.addEventListener('click', close);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', close);
+});
 </script>

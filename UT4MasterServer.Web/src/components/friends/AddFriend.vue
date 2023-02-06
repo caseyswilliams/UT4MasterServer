@@ -22,9 +22,6 @@
   display: flex;
   div {
     flex-grow: 1;
-    :deep(.form-control) {
-      padding: 0.5rem;
-    }
   }
   button {
     padding: 0.5rem 1rem;
